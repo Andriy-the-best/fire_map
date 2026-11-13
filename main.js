@@ -23,9 +23,9 @@ function buildAbout() {
 const simBtn = document.createElement("a");
 simBtn.id = "btn-sim"; simBtn.className = "hbtn";
 document.getElementById("btn-lang").before(simBtn);
-simBtn.addEventListener("click", () => {                       // веде на симулятор: обране місце або центр карти
-  if (selected) { simBtn.href = simUrl(selected); return; }
-  simBtn.href = "simulator.html?" + new URLSearchParams({ lang });      // місце не обране: у симуляторі стартова територія за замовчуванням
+simBtn.addEventListener("click", e => {                        // веде на симулятор: обране місце або стартова територія
+  e.preventDefault();                                          // переходимо вручну, щоб не залежати від зміни href під час кліку
+  location.href = selected ? simUrl(selected) : "simulator.html?" + new URLSearchParams({ lang });
 });
 simBtn.href = "simulator.html";
 
