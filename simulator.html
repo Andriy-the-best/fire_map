@@ -3,81 +3,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fire spread simulator</title>
+  <title>Fire danger map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/sim.css">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="simpage">
+<body>
   <header>
     <h1 data-t="title"></h1>
-    <a class="hbtn" id="back" href="index.html" data-t="back"></a>
+    <form id="search">
+      <input id="q" type="search" autocomplete="off">
+      <button type="submit" data-t="go"></button>
+    </form>
+    <button id="btn-compare" type="button" data-t="compare"></button>
     <button id="btn-lang" type="button"></button>
   </header>
 
   <main>
-    <div id="fireview">
-      <canvas id="canvas" width="720" height="720"></canvas>
-    </div>
-
-    <aside id="panel">
-      <section id="place">
-        <button id="new-map" type="button" data-t="newMap"></button>
-        <label class="row"><span data-t="size"></span><output id="o-size"></output><input id="size" type="range" min="1" max="8" step="0.5" value="4"></label>
-      </section>
-
-      <section id="p-step2">
-        <h2 data-t="step2"></h2>
-        <p class="hint" data-t="hintFire"></p>
-        <div class="tools">
-          <label><input type="radio" name="tool" value="ignite" checked><span data-t="toolIgnite"></span></label>
-          <label><input type="radio" name="tool" value="brk"><span data-t="toolBrk"></span></label>
-        </div>
-        <div class="btns">
-          <button id="run" class="primary" type="button"></button>
-          <button id="one" type="button" data-t="one"></button>
-          <button id="reset" type="button" data-t="reset"></button>
-        </div>
-        <div class="btns">
-          <button id="clear-ign" type="button" data-t="clearIgn"></button>
-          <button id="clear-brk" type="button" data-t="clearBrk"></button>
-        </div>
-        <label class="row"><span data-t="speed"></span><input id="speed" type="range" min="1" max="60" value="12"></label>
-        <dl id="stats">
-          <div><dt data-t="time"></dt><dd id="s-time">0</dd></div>
-          <div><dt data-t="burned"></dt><dd id="s-ha">0</dd></div>
-          <div><dt data-t="share"></dt><dd id="s-pct">0</dd></div>
-          <div><dt data-t="now"></dt><dd id="s-now">0</dd></div>
-          <div><dt data-t="terrain"></dt><dd id="s-ter">–</dd></div>
-          <div><dt data-t="cellsize"></dt><dd id="s-cell">–</dd></div>
-        </dl>
-        <canvas id="chart" width="320" height="110"></canvas>
-      </section>
-
-      <section id="cond">
-        <h3 data-t="cond"></h3>
-        <p id="fromMap" class="hint"></p>
-        <label class="row"><span data-t="fuel"></span><select id="fuel"></select></label>
-        <label class="row"><span data-t="temp"></span><output id="o-temp"></output><input id="temp" type="range" min="-10" max="50" step="1" value="30"></label>
-        <label class="row"><span data-t="hum"></span><output id="o-hum"></output><input id="hum" type="range" min="5" max="100" step="1" value="30"></label>
-        <label class="row"><span data-t="wind"></span><output id="o-wind"></output><input id="wind" type="range" min="0" max="25" step="0.5" value="5"></label>
-        <label class="row"><span data-t="dir"></span><output id="o-dir"></output><input id="dir" type="range" min="0" max="359" step="1" value="270"></label>
-      </section>
-
-      <section id="runs" hidden>
-        <h3 data-t="runs"></h3>
-        <table id="runs-table"></table>
-      </section>
-
-      <p class="note" data-t="note"></p>
-    </aside>
+    <div id="map"></div>
+    <aside id="panel"></aside>
   </main>
 
   <footer>
-    <span class="credit">Model: Alexandridis et al., 2008</span>
+    <span data-t="legend"></span>
+    <span id="legend"></span>
+    <span class="credit">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a></span>
+    <span class="credit">Weather: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> · Borders: geoBoundaries, Natural Earth</span>
   </footer>
 
-  <script src="js/fire-model.js"></script>
-  <script src="js/sim.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="i18n.js"></script>
+  <script src="weather.js"></script>
+  <script src="risk.js"></script>
+  <script src="map.js"></script>
+  <script src="compare.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
