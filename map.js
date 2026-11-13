@@ -242,7 +242,7 @@ function refreshTooltips() {
 // ---------- Найнебезпечніші місця: столиці та міста-мільйонники, фільтр за рівнем ----------
 // Адреса власного сервера (папка server). Порожній рядок "" = без сервера, тоді беремо міста напряму з Open-Meteo.
 // Локально: "http://localhost:3000". Після розміщення сервера в інтернеті встав сюди його адресу.
-const HOTSPOTS_API = "http://localhost:3000";
+const HOTSPOTS_API = "https://fire-map-server.onrender.com";
 const capDots = [];
 const HOT_CELL = 2;               // у кожній клітинці 2°×2° лишаємо найбільше місто
 const HOT_MAX = 300;              // не більше 300 місць: інакше Open-Meteo блокує запити
