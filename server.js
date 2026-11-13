@@ -9,12 +9,12 @@ const path = require("path");
 
 const CFG = {
   port: +process.env.PORT || 3000,
-  step: 2.5,            // крок сітки в градусах (≈ 275 км). Менший крок = більше запитів
+  step: 3,              // крок сітки в градусах (≈ 330 км). Менший крок = більше запитів
   batch: 50,            // скільки точок в одному запиті до Open-Meteo
-  pauseMs: 1500,        // пауза між запитами, щоб не перевищити ліміт за хвилину
+  pauseMs: 6000,        // пауза між запитами: пачка з 50 точок рахується як 50 запитів, ліміт Open-Meteo ≈ 600 запитів за хвилину
   retryMinutes: 30,     // через скільки пробувати знову, якщо вичерпано ліміт
-  refreshHours: 8,      // як часто оновлювати (3 рази на добу ≈ 8000 запитів з ліміту 10000)
-  latMin: -56, latMax: 72,
+  refreshHours: 12,     // як часто оновлювати (2 рази на добу ≈ 3000 запитів з ліміту 10000)
+  latMin: -50, latMax: 66,   // далі до полюсів пожеж майже немає — не витрачаємо запити
   dataDir: path.join(__dirname, "data")
 };
 const NE = "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/";
@@ -107,19 +107,29 @@ async function refresh() {
     const out = [];
     for (let i = 0; i < grid.length; i += CFG.batch) {
       const part = grid.slice(i, i + CFG.batch);
-      try {
-        const list = await fetchBatch(part);
-        list.forEach((w, k) => {
-          const n = nesterov(w);
-          out.push({ lat: part[k][0], lng: part[k][1], lvl: level(n.G), G: n.G, dry: n.dry,
-                     temp: Math.round(w.current.temperature_2m), hum: Math.round(w.current.relative_humidity_2m) });
-        });
-      } catch (e) {
-        if (e.limit) {   // ліміт вичерпано: не мучимо Open-Meteo, зупиняємось і пробуємо пізніше
-          log("ЛІМІТ Open-Meteo вичерпано. Зупиняюсь, спробую ще раз через", CFG.retryMinutes, "хв");
-          STATE.running = false; setTimeout(refresh, CFG.retryMinutes * 60e3); return;
+      let tries = 0;
+      while (true) {
+        try {
+          const list = await fetchBatch(part);
+          list.forEach((w, k) => {
+            const n = nesterov(w);
+            out.push({ lat: part[k][0], lng: part[k][1], lvl: level(n.G), G: n.G, dry: n.dry,
+                       temp: Math.round(w.current.temperature_2m), hum: Math.round(w.current.relative_humidity_2m) });
+          });
+          break;
+        } catch (e) {
+          if (e.limit) {   // ліміт за хвилину: чекаємо хвилину й повторюємо ту саму пачку, зібране не втрачаємо
+            if (++tries > 3) {   // не допомогло (ліміт за годину чи добу): зупиняємось і пробуємо пізніше
+              log("ЛІМІТ Open-Meteo вичерпано. Зупиняюсь, спробую ще раз через", CFG.retryMinutes, "хв");
+              STATE.running = false; setTimeout(refresh, CFG.retryMinutes * 60e3); return;
+            }
+            log("ліміт за хвилину, чекаю 65 с і повторюю пачку", i);
+            await sleep(65e3);
+            continue;
+          }
+          log("пропускаю пачку", i, e.message);
+          break;
         }
-        log("пропускаю пачку", i, e.message);
       }
       STATE.progress = `${Math.min(i + CFG.batch, grid.length)}/${grid.length}`;
       await sleep(CFG.pauseMs);
