@@ -1,0 +1,342 @@
+:root{
+  --bg:#f4f5f2; --ink:#1d2327; --muted:#6a726c; --line:#d9ddd6; --panel:#fff;
+  /* п'ять рівнів небезпеки: єдині яскраві кольори на сторінці */
+  --l0:#2f9e5b; --l1:#d4c21c; --l2:#f0a21e; --l3:#e5501b; --l4:#a31225;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{display:grid;grid-template-rows:auto 1fr auto;font-family:Onest,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+
+header{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+h1{font-size:18px;margin:0 auto 0 0;font-weight:700}
+#search{display:flex;gap:6px}
+input,button{font:inherit;padding:7px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink)}
+input{width:200px}
+button{cursor:pointer}
+button:hover{border-color:var(--ink)}
+#btn-compare.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+main{display:grid;grid-template-columns:1fr 340px;min-height:0}
+body.cmp main{grid-template-columns:1fr 540px}
+#map{min-height:300px;background:#e9ece6}
+#panel{padding:18px;overflow:auto;background:var(--panel);border-left:1px solid var(--line)}
+
+.hint{color:var(--muted);line-height:1.5}
+h2{font-size:20px;margin:0 0 10px}
+.gauge{display:flex;gap:3px;margin:6px 0}
+.gauge i{flex:1;height:10px;border-radius:2px}
+.level{font-weight:700;margin:0 0 14px}
+dl{margin:0 0 14px}
+dl div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)}
+dt{color:var(--muted)} dd{margin:0;font-weight:500}
+.advice{line-height:1.5;margin:0 0 10px}
+.emerg{color:var(--muted);font-size:14px;margin:0}
+
+table{width:100%;border-collapse:collapse}
+th,td{padding:7px 6px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted)}
+td.name{font-weight:700;font-size:16px}
+
+footer{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 16px;font-size:13px;color:var(--muted);background:var(--panel);border-top:1px solid var(--line)}
+#legend{display:flex;gap:12px;flex-wrap:wrap}
+#legend span{display:inline-flex;align-items:center;gap:5px}
+#legend b{width:12px;height:12px;border-radius:50%;display:inline-block}
+.credit{margin-left:auto}
+
+@media (max-width:760px){
+  main,body.cmp main{grid-template-columns:1fr;grid-template-rows:1fr auto}
+  #panel{max-height:45vh;border-left:0;border-top:1px solid var(--line)}
+  input{width:140px}
+}
+/* Фон сторінки: м'яке тепле світіння в кутах */
+body{
+  background:
+    radial-gradient(900px 500px at 10% -10%, rgba(229,80,27,.16), transparent 60%),
+    radial-gradient(800px 500px at 100% 0, rgba(240,162,30,.14), transparent 60%),
+    linear-gradient(180deg,#f7f3ee 0%,#eceff0 100%);
+  background-attachment:fixed;
+}
+
+/* Верхня панель: темний «жар» із відблиском */
+header{
+  padding:22px clamp(16px,3vw,40px);
+  border-bottom:0;
+  background:
+    radial-gradient(600px 220px at 85% 130%, rgba(229,80,27,.55), transparent 70%),
+    radial-gradient(500px 200px at 8% -40%, rgba(240,162,30,.35), transparent 70%),
+    linear-gradient(120deg,#14181b 0%,#2a1713 55%,#5a1a12 100%);
+  box-shadow:0 10px 30px rgba(20,24,27,.2);
+}
+h1{color:#fff;font-size:clamp(22px,2.6vw,32px);line-height:1.1;letter-spacing:-.01em}
+
+/* Поле пошуку й кнопки: скляні */
+header input{
+  padding:10px 14px;border-radius:10px;color:#fff;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);
+  backdrop-filter:blur(6px);
+}
+header input::placeholder{color:rgba(255,255,255,.6)}
+header button{
+  padding:10px 16px;border-radius:10px;color:#fff;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);
+  transition:background .2s,border-color .2s;
+}
+header button:hover{background:rgba(255,255,255,.22);border-color:#fff}
+header #btn-compare.on{background:#fff;color:#1d2327;border-color:#fff}
+header :focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* Карта й панель стають окремими блоками на фоні */
+main{gap:16px;padding:16px clamp(16px,3vw,40px)}
+#map{border-radius:14px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(20,24,27,.08)}
+#panel{border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(20,24,27,.08)}
+
+/* Нижній рядок з легендою */
+footer{background:rgba(255,255,255,.6);backdrop-filter:blur(6px);border-top:0}
+/* Єдиний фон для всієї сторінки: темний жар із відблисками по кутах */
+html{background:#14181b}
+body{
+  background:
+    radial-gradient(800px 450px at 92% 0%, rgba(229,80,27,.50), transparent 70%),
+    radial-gradient(700px 450px at 0% 35%, rgba(240,162,30,.20), transparent 70%),
+    radial-gradient(900px 550px at 100% 100%, rgba(163,18,37,.45), transparent 70%),
+    radial-gradient(600px 400px at 5% 100%, rgba(229,80,27,.25), transparent 70%),
+    linear-gradient(160deg,#14181b 0%,#2a1713 50%,#4a150f 100%);
+  background-attachment:fixed;
+}
+
+/* Шапка тепер прозора: фон сторінки продовжується крізь неї */
+header{
+  background:transparent;
+  box-shadow:none;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+/* Карта й панель лишаються світлими блоками на темному фоні */
+#map,#panel{
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 12px 36px rgba(0,0,0,.35);
+}
+
+/* Нижній рядок: світлий текст на темному */
+footer{
+  background:transparent;
+  backdrop-filter:none;
+  color:rgba(255,255,255,.7);
+  border-top:1px solid rgba(255,255,255,.12);
+}
+footer a{color:#fff}
+/* Карта: темний океан, світіння точок */
+#map{background:#0d1114}
+.leaflet-overlay-pane path.leaflet-interactive{filter:drop-shadow(0 0 5px rgba(255,255,255,.4))}
+
+/* Кнопки зуму, підпис і підказки в тому ж стилі */
+.leaflet-bar a{background:rgba(20,24,27,.9);color:#fff;border-color:rgba(255,255,255,.2)}
+.leaflet-bar a:hover{background:#2a1713;color:#fff}
+.leaflet-bar a.leaflet-disabled{background:rgba(20,24,27,.6);color:#777}
+.leaflet-control-attribution{background:rgba(20,24,27,.7)!important;color:#9aa0a3}
+.leaflet-control-attribution a{color:#cfd3d5}
+.leaflet-tooltip{background:#14181b;color:#fff;border:1px solid rgba(255,255,255,.2);font-family:inherit}
+.leaflet-tooltip-top:before{border-top-color:#14181b}
+
+/* Панель: темне скло замість білого блоку */
+#panel{
+  --ink:#f3efe8; --muted:#a8a39a; --line:rgba(255,255,255,.14);
+  color:var(--ink);
+  background:rgba(20,24,27,.72);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.18);
+}
+
+/* ===== Підписи країн і міст на карті ===== */
+/* розмір шрифту росте з масштабом: змінну --z ставить map.js */
+.lbl{pointer-events:none}
+.lbl span{display:inline-block;white-space:nowrap}
+
+/* Країни: великі літери, розріджені, світлі */
+.lbl.country span{
+  transform:translate(-50%,-50%);
+  font-size:calc(9px + var(--z,2) * 1.8px);
+  letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  color:rgba(255,255,255,.6);
+}
+
+/* Міста: крапка + назва */
+.lbl.city span{
+  position:relative;transform:translate(-3px,-50%);padding-left:11px;
+  font-size:calc(9px + var(--z,2) * .9px);
+  color:rgba(255,255,255,.85);
+  text-shadow:0 0 4px #0d1114,0 0 8px #0d1114;
+}
+.lbl.city span::before{
+  content:"";position:absolute;left:0;top:50%;width:5px;height:5px;margin-top:-2.5px;
+  border-radius:50%;background:rgba(255,255,255,.7);
+}
+.lbl.cap span{font-weight:700;color:#fff}                    /* столиці */
+.lbl.cap span::before{width:7px;height:7px;margin-top:-3.5px;background:#fff}
+.lbl.reg span{color:rgba(255,255,255,.7)}                   /* обласні центри */
+
+/* Назви великих міст з кольоровими точками: без рамки, ростуть при наближенні */
+.leaflet-tooltip.city-label{
+  background:transparent;border:0;box-shadow:none;color:#fff;font-weight:500;
+  font-size:calc(10px + var(--z,2) * 1px);
+  text-shadow:0 1px 3px #000,0 0 6px #000;
+}
+.leaflet-tooltip.city-label:before{display:none}
+
+/* ===== Справжня карта в одній гамі зі сторінкою ===== */
+.leaflet-tile-pane{filter:sepia(.28) saturate(.85) brightness(.88) contrast(1.05)}  /* тепліша й темніша */
+.leaflet-overlay-pane path.leaflet-interactive{filter:none}
+#map{
+  background:#cfd8dc;
+  border:1px solid rgba(240,162,30,.45);
+  box-shadow:0 0 0 6px rgba(20,24,27,.55), 0 0 40px rgba(229,80,27,.35), 0 16px 40px rgba(0,0,0,.5);
+}
+/* віньєтка: краї карти плавно йдуть у темряву */
+#map::after{
+  content:"";position:absolute;inset:0;z-index:500;pointer-events:none;border-radius:inherit;
+  box-shadow:inset 0 0 70px 10px rgba(20,12,10,.55);
+}
+#panel{box-shadow:0 0 0 6px rgba(20,24,27,.55), 0 0 40px rgba(229,80,27,.25), 0 16px 40px rgba(0,0,0,.5)}
+
+/* Назви міст з кольоровими точками: темна плашка, читається на світлій карті */
+.leaflet-tooltip.city-label{
+  background:rgba(20,24,27,.85);color:#fff;border:0;border-radius:6px;
+  padding:2px 7px;text-shadow:none;box-shadow:0 2px 6px rgba(0,0,0,.3)
+}
+
+/* Пульсуючі кільця на знайденому місці */
+.found i{
+  position:absolute;left:-32px;top:-32px;width:64px;height:64px;border-radius:50%;
+  border:3px solid #f0a21e;box-shadow:0 0 18px rgba(240,162,30,.8);
+  opacity:0;animation:ring 1.8s ease-out infinite;pointer-events:none;
+}
+.found i:nth-child(2){animation-delay:.9s}
+@keyframes ring{0%{transform:scale(.2);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+@media (prefers-reduced-motion:reduce){.found i{animation:none;opacity:.8}}
+header button:disabled{opacity:.5;cursor:progress}
+
+/* Фільтр небезпечних місць на карті */
+.hot-ctl{
+  margin-top:8px;padding:10px 12px;border-radius:10px;min-width:170px;
+  background:rgba(20,24,27,.92);color:#fff;border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 2px 8px rgba(0,0,0,.3);font-size:13px;
+}
+.hot-ctl b{display:block;margin-bottom:4px;font-weight:600}
+.hot-btns{display:flex;gap:4px}
+.hot-btns button{
+  flex:1;font:inherit;font-size:13px;padding:6px 0;border-radius:6px;cursor:pointer;
+  background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);
+}
+.hot-btns button:hover{border-color:#f0a21e}
+.hot-btns button.on{background:#f0a21e;border-color:#f0a21e;color:#1b1209;font-weight:700}
+.hot-ctl span{display:block;margin-top:0;opacity:.75;font-size:12px}
+
+/* Гарні точки небезпеки: кольорове сяйво, пульсація, збільшення при наведенні */
+.hot-dot{
+  --c:#f0a21e;
+  stroke:rgba(255,255,255,.95);cursor:pointer;
+  filter:drop-shadow(0 0 4px var(--c)) drop-shadow(0 1px 2px rgba(0,0,0,.45));
+  transform-box:fill-box;transform-origin:center;
+  transition:transform .18s ease;
+}
+.hot-dot.l0{--c:#3ddc84}.hot-dot.l1{--c:#f2e12e}.hot-dot.l2{--c:#ffb133}
+.hot-dot.l3{--c:#ff5a24}.hot-dot.l4{--c:#ff2d3f}
+.hot-dot.l0,.hot-dot.l1,.hot-dot.l2{animation:hotSoft 3.2s ease-in-out infinite}
+.hot-dot.l3{animation:hotPulse 2.2s ease-in-out infinite}
+.hot-dot.l4{animation:hotPulse 1.5s ease-in-out infinite}
+.hot-dot:hover{transform:scale(1.35)}
+@keyframes hotPulse{
+  0%,100%{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+  50%{filter:drop-shadow(0 0 11px var(--c)) drop-shadow(0 0 4px var(--c))}
+}
+@media (prefers-reduced-motion:reduce){.hot-dot{animation:none!important}}
+
+@keyframes hotSoft{
+  0%,100%{filter:drop-shadow(0 0 3px var(--c)) drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+  50%{filter:drop-shadow(0 0 7px var(--c)) drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+}
+/* Хвиля навколо обраного місця: швидша для вищого рівня */
+.sel-ring{
+  --c:#f0a21e;stroke:var(--c);pointer-events:none;
+  transform-box:fill-box;transform-origin:center;
+  animation:selRing 2.4s ease-out infinite;
+}
+.sel-ring.l0{--c:#3ddc84}.sel-ring.l1{--c:#f2e12e}.sel-ring.l2{--c:#ffb133}
+.sel-ring.l3{--c:#ff5a24;animation-duration:1.8s}.sel-ring.l4{--c:#ff2d3f;animation-duration:1.2s}
+@keyframes selRing{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+@media (prefers-reduced-motion:reduce){.sel-ring{animation:none;opacity:.6}}
+
+/* Пошук міста всередині панелі порівняння */
+.cmp-search{display:flex;gap:8px;margin:12px 0 4px}
+.cmp-search input{
+  flex:1;min-width:0;width:auto;padding:10px 14px;border-radius:10px;color:#fff;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);
+}
+.cmp-search input::placeholder{color:rgba(255,255,255,.55)}
+.cmp-search button{
+  padding:10px 16px;border-radius:10px;color:#fff;cursor:pointer;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);transition:background .2s,border-color .2s;
+}
+.cmp-search button:hover{background:rgba(255,255,255,.22);border-color:#fff}
+.cmp-search button:disabled{opacity:.5;cursor:progress}
+.cmp-search :focus-visible{outline:2px solid #f0a21e;outline-offset:2px}
+#cmp-msg:empty{display:none}
+
+/* Сторінка тепер прокручується: карта на висоту екрана, під нею блок пояснень */
+html,body{height:auto;min-height:100%}
+body{grid-template-rows:auto auto auto auto}
+main{height:max(520px,calc(100vh - 150px))}
+@media (max-width:760px){
+  main,body.cmp main{height:auto}
+  #map{height:55vh}
+}
+
+#about{padding:28px clamp(16px,3vw,40px) 36px;color:#fff}
+#about h2{font-size:clamp(22px,2.4vw,28px);margin:0 0 18px;letter-spacing:-.01em}
+#about h3{font-size:16px;margin:0 0 10px}
+.lv-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.lv-card{
+  position:relative;padding:14px 14px 14px 18px;border-radius:14px;overflow:hidden;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+  display:flex;flex-direction:column;gap:4px;
+}
+.lv-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c)}
+.lv-card b{font-size:22px;color:var(--c);filter:brightness(1.3)}
+.lv-card span{font-size:13px;color:rgba(255,255,255,.7)}
+.about-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.about-cols article{
+  padding:18px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+}
+.about-cols ol,.about-cols ul{margin:0;padding-left:20px;line-height:1.55;color:rgba(255,255,255,.82);font-size:14px}
+.about-cols li+li{margin-top:6px}
+
+/* Кнопка переходу до симулятора пожежі */
+header a.hbtn{
+  padding:10px 16px;border-radius:10px;color:#fff;text-decoration:none;
+  background:rgba(240,162,30,.22);border:1px solid #f0a21e;transition:background .2s;
+}
+header a.hbtn:hover{background:rgba(240,162,30,.4)}
+.sim-link{
+  display:block;margin:4px 0 12px;padding:10px 14px;border-radius:10px;text-align:center;font-weight:700;text-decoration:none;
+  color:#1b1209;background:#f0a21e;transition:background .2s;
+}
+.sim-link:hover{background:#ffb740}
+
+/* ===== Адаптація під телефон і планшет ===== */
+html{-webkit-text-size-adjust:100%}
+@supports (height:100dvh){ main{height:max(520px,calc(100dvh - 150px))} }
+.leaflet-touch .leaflet-bar a{width:36px;height:36px;line-height:36px}
+@media (max-width:760px){
+  header{padding:10px 14px;gap:8px}
+  h1{flex:1 1 100%;margin:0}
+  #search{flex:1 1 100%}
+  header input{flex:1;width:100%;min-width:0}
+  header button,header a.hbtn{min-height:42px}
+  #map{min-height:360px}
+  footer{flex-direction:column;align-items:flex-start;gap:6px}
+  .credit{margin-left:0}
+  #about{padding:24px 16px 28px}
+  .lv-cards{grid-template-columns:repeat(2,1fr)}
+  .about-cols{grid-template-columns:1fr}
+}
